@@ -122,3 +122,50 @@ tuned_lgbm_rmse, tuned_lgbm_r2, tuned_lgbm_mape, tuned_lgbm_mae = model_metrics(
 print("Tuned LGBM RMSE: ", tuned_lgbm_rmse, 'R2 Score: ', tuned_lgbm_r2, 'Mape: ', tuned_lgbm_mape, 'MAE:', tuned_lgbm_mae)
 print("LGBM RMSE: ", lgbm_rmse, 'R2 Score: ', lgbm_r2, 'Mape: ', lgbm_mape, 'MAE:' , lgbm_mae)
 
+# Get the feature importances of the tuned LGBM and GLM models and create dataframes
+imp_lgbm = lgbm_best_model.feature_importances_
+imp_glm = np.abs(glm_best_model.coef_)
+imp_df = pd.DataFrame([imp_lgbm, imp_glm]).T
+imp_df.columns = ['LGBM', 'GLM']
+imp_df.index = X.columns
+
+# Get the top 5 important features and plot them 
+top5_lgbm = imp_df['LGBM'].sort_values(ascending=False).head(5)
+top5_glm = imp_df['GLM'].sort_values(ascending=False).head(5)
+
+plt.figure(figsize=(12, 4), dpi=300)
+# Top 5 important features in LGBM model    
+plt.subplot(1, 2, 1)
+top5_lgbm.plot(kind='bar', color='skyblue')
+plt.title('Top 5 Features Importance in LGBM')
+plt.xlabel('Features')
+plt.ylabel('Importance Score')
+# Top 5 important features in GLM model
+plt.subplot(1, 2, 2)
+top5_glm.plot(kind='bar', color='lightgreen')
+plt.title('Top 5 Features Importance in GLM')
+plt.xlabel('Features')
+plt.ylabel('Importance Score')
+
+plt.tight_layout()
+plt.savefig("save/feature_importance_top5.png")
+plt.show()
+'''
+From the plot, it can be seen that the top 5 important features are different in two models
+
+For LGBM, the top 5: 
+1. USB_High (US bond rate high data), 
+2. USDI_Volume (US Dollar Index volume data), 
+3. Volume (Gold ETF volume data), 
+4. USO_Volume (Oil ETF volume data), 
+5. EG_Volume (Eldorado Gold Corporations volume data)
+
+For GLM, the top 5: 
+1. USB_High (US bond rate high data), 
+2. SP_Open (S&P 500 Index open data), 
+3. SP_Ajclose (S&P 500 Index adjusted close data), 
+4. PLD_Trend (Palladium price trend data)
+5. PLT_Trend (Platinum price trend data)
+'''
+
+# The partial dependence plot of the top 5 important features of tuned LGBM model
