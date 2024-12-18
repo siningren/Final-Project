@@ -1,5 +1,5 @@
 #This is a module for data loading
-#The raw dataset is a gold price prediction dataset from Kaggle
+#The raw dataset is a gold price prediction dataset from Kaggle, and I have already downloaded it to the data folder
 #The target variable is the Adjusted Close Price (Adj Close)
 
 import pandas as pd
