@@ -8,6 +8,7 @@ from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_percenta
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.inspection import PartialDependenceDisplay
 
 # This part is setting up my model pipelines for both GLM and LGBM
 # GLM model pipeline
@@ -47,7 +48,7 @@ def model_metrics(true, pred, title, if_show):
         plt.grid()
         plt.title(title)
         plt.savefig(f"save/{title}.png")
-        #plt.show()
+        plt.show()
     return rmse, r2, mape, mae
 
 # k-fold cross validation function
@@ -105,7 +106,7 @@ base_lgbm = LGBMRegressor()
 lgbm_best_model, lgbm_best_params, lgbm_cv_results = grid_search_model(lgbm_param_grid, base_lgbm, X, y)
 print("GridSearchCV LGBM best params: ", lgbm_best_params, 'cv results: ', np.mean(lgbm_cv_results['std_test_score']))
 
-# Evaluate the predictions of tuned GLM and LGBM pipelines on your validation set
+# Evaluate the predictions of tuned GLM and LGBM pipelines
 # Create the "Predicted vs Actual" plot for tuned GLM model and LGBM model
 # From the printed results, it can be seen that the tuned GLM has lower RMSE, higher R2 score, lower Mape, and lower MAE than the original one.
 # This proves that the tuned GLM model is better than the original one
@@ -169,3 +170,6 @@ For GLM, the top 5:
 '''
 
 # The partial dependence plot of the top 5 important features of tuned LGBM model
+PartialDependenceDisplay.from_estimator(lgbm_best_model, X, features=top5_lgbm.index, target='Adj Close')
+plt.savefig("save/PDP_top5_lgbm.png")
+plt.show()
