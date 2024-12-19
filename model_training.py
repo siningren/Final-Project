@@ -81,8 +81,8 @@ lgbm_model.fit(x_train, y_train)
 lgbm_pred = lgbm_model.predict(x_test)
 
 # Model evaluation before hyperparameter tuning 
-glm_rmse, glm_r2, glm_mape, glm_mae = model_metrics(y_test, glm_pred, title="GLM Model Curve Fit", if_show= False)
-lgbm_rmse, lgbm_r2, lgbm_mape, lgbm_mae = model_metrics(y_test, lgbm_pred, title="LGBM Model Curve Fit", if_show= False)
+glm_rmse, glm_r2, glm_mape, glm_mae = model_metrics(y_test, glm_pred, title="(before tuning) GLM Model Curve Fit", if_show= True)
+lgbm_rmse, lgbm_r2, lgbm_mape, lgbm_mae = model_metrics(y_test, lgbm_pred, title="(before tuning) LGBM Model Curve Fit", if_show= True)
 
 
 # Tune the model pipelines
@@ -108,20 +108,13 @@ print("GridSearchCV LGBM best params: ", lgbm_best_params, 'cv results: ', np.me
 
 # Evaluate the predictions of tuned GLM and LGBM pipelines
 # Create the "Predicted vs Actual" plot for tuned GLM model and LGBM model
-# From the printed results, it can be seen that the tuned GLM has lower RMSE, higher R2 score, lower Mape, and lower MAE than the original one.
-# This proves that the tuned GLM model is better than the original one
 glm_best_model.fit(x_train, y_train)
 tuned_glm_pred = glm_best_model.predict(x_test)
 tuned_glm_rmse, tuned_glm_r2, tuned_glm_mape, tuned_glm_mae = model_metrics(y_test, tuned_glm_pred, title="Predicted vs Actual for Tuned GLM Model", if_show = True) 
-print("Tuned GLM RMSE: ", tuned_glm_rmse, 'R2 Score: ', tuned_glm_r2, 'Mape: ', tuned_glm_mape, 'MAE:', tuned_glm_mae)
-print("GLM RMSE: ", glm_rmse, 'R2 Score: ', glm_r2, 'Mape: ', glm_mape, 'MAE:' , glm_mae)
 
-# From the printed results, it can be seen that the tuned LGBM has lower RMSE, higher R2 score, lower Mape, and lower MAE
 lgbm_best_model.fit(x_train, y_train)
 tuned_lgbm_pred = lgbm_best_model.predict(x_test)
 tuned_lgbm_rmse, tuned_lgbm_r2, tuned_lgbm_mape, tuned_lgbm_mae = model_metrics(y_test, tuned_lgbm_pred, title="Predicted vs Actual for Tuned LGBM Model", if_show = True)
-print("Tuned LGBM RMSE: ", tuned_lgbm_rmse, 'R2 Score: ', tuned_lgbm_r2, 'Mape: ', tuned_lgbm_mape, 'MAE:', tuned_lgbm_mae)
-print("LGBM RMSE: ", lgbm_rmse, 'R2 Score: ', lgbm_r2, 'Mape: ', lgbm_mape, 'MAE:' , lgbm_mae)
 
 # Get the feature importances of the tuned LGBM and GLM models and create dataframes
 imp_lgbm = lgbm_best_model.feature_importances_
@@ -151,6 +144,7 @@ plt.ylabel('Importance Score')
 plt.tight_layout()
 plt.savefig("save/feature_importance_top5.png")
 plt.show()
+
 '''
 From the plot, it can be seen that the top 5 important features are different in two models
 
@@ -173,3 +167,11 @@ For GLM, the top 5:
 PartialDependenceDisplay.from_estimator(lgbm_best_model, X, features=top5_lgbm.index, target='Adj Close')
 plt.savefig("save/PDP_top5_lgbm.png")
 plt.show()
+
+# Print the evaluation results of the tuned GLM and LGBM models
+# From the printed results, it can be seen that the tuned GLM and LGBM models have lower RMSE, higher R2 score, lower Mape, and lower MAE than the original one.
+# This proves that the tuned models are better than the original ones
+print("Tuned GLM RMSE: ", tuned_glm_rmse, 'R2 Score: ', tuned_glm_r2, 'Mape: ', tuned_glm_mape, 'MAE:', tuned_glm_mae)
+print("GLM RMSE: ", glm_rmse, 'R2 Score: ', glm_r2, 'Mape: ', glm_mape, 'MAE:' , glm_mae)
+print("Tuned LGBM RMSE: ", tuned_lgbm_rmse, 'R2 Score: ', tuned_lgbm_r2, 'Mape: ', tuned_lgbm_mape, 'MAE:', tuned_lgbm_mae)
+print("LGBM RMSE: ", lgbm_rmse, 'R2 Score: ', lgbm_r2, 'Mape: ', lgbm_mape, 'MAE:' , lgbm_mae)
