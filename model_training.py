@@ -149,18 +149,18 @@ plt.show()
 From the plot, it can be seen that the top 5 important features are different in two models
 
 For LGBM, the top 5: 
-1. USB_High (US bond rate high data), 
-2. USDI_Volume (US Dollar Index volume data), 
+1. USB_Price (US bond Price data), 
+2. GDX_Volume (Gold Miners ETF volume data), 
 3. Volume (Gold ETF volume data), 
-4. USO_Volume (Oil ETF volume data), 
-5. EG_Volume (Eldorado Gold Corporations volume data)
+4. DJ_Volume (Dow Jones Index volume data), 
+5. SP_Volume (S&P 500 Index volume data)
 
 For GLM, the top 5: 
-1. USB_High (US bond rate high data), 
-2. SP_Open (S&P 500 Index open data), 
-3. SP_Ajclose (S&P 500 Index adjusted close data), 
-4. PLD_Trend (Palladium price trend data)
-5. PLT_Trend (Platinum price trend data)
+1. USB_Price (US bond Price data), 
+2. USO_Open (Oil ETF USO open data), 
+3. OS_Trend (Crude Oil WTI USD trend data), 
+4. OS_Price (Crude Oil WTI USD price data)
+5. EU_Trend (EUR USD Exchange rate trend data)
 '''
 
 # The partial dependence plot of the top 5 important features of tuned LGBM model
